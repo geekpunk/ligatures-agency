@@ -3,6 +3,147 @@ import './App.css'
 
 const BASE = import.meta.env.BASE_URL
 
+const lyrics = {
+  'All Kindsa Guys': `I've been growing a mustache
+I've been getting into weird martial arts
+And I don't care any more
+I've lost the will to want more
+
+I've been building my brand
+I've been talking about "projects"
+That I never will do
+Watch me tell it to you
+
+Look at me!
+Acknowledge me!
+There are all kinds of guys here but none like me
+
+I've been getting tattoos of swords and maces
+I've been loitering in public spaces
+Come and talk to me
+
+I've been documenting my minutiae
+incessantly
+Put down whatever you're on
+Look I wrote you a song`,
+
+  'White Rose': `dad told me to teach the kids
+How to drive and how to swim
+when they come you never know
+when they are here it's time to go
+
+We've seen this all before
+From tulsa to Dachau
+We've seen this all before
+from the plaines to the shores
+
+Sophie and Hans left
+On such a fine sunny day
+So thousands can awaken
+And be stirred today
+
+We've seen this all before
+From the tulsa to the putsch
+We've seen this all before
+from the cities to the hills
+
+It's just a test
+Free their body
+It's just a test
+Free Palestine
+It's just a test
+Free DC`,
+
+  'Eyes Wide Open': `Am I what you want
+Is this what you want us to be
+Am I what you want
+Is this what you what you want to be
+It was all a game after all, it was just a game`,
+
+  'Currency Museum': `How does gold turn to lead?
+How does lead turn to rust?
+How does a trillion evaporate?
+How do you monetize trust?
+
+These answers and more in the currency museum
+
+Why does rarity bring value?
+Why does production bring decline?
+Why are forgeries burnt?
+How does it move the lines?
+
+Does this make sense? Does this make euros, does this make cents?
+Does this make sense? Does this make pounds, does this make pence?
+Dollars and dinars, yuan and yen
+Met expectations, smile and pretend
+
+In the currency museum
+Make money or just make your own`,
+
+  'Position Paper': `Value proposition on my chest.
+Position papers are referenced.
+Reaction, transaction
+What more do I need to say about whoever's lives matter today
+Consult my feed, no need for talking. Any questions read my front
+Categorize, tabulate
+Ossify, disseminate.`,
+
+  'Sheer Terror': null,
+
+  'Naval Observatory': `Don't have to roll in the mud
+just to learn that it's dirty
+as the years they marched on on on
+look what's become of me
+can't put it into words
+can barely put it to sound
+no matter how deep I go
+I'm never feeling the ground
+
+Trapped in the Navel
+Observatory
+you're going to hear me shout
+Shout shout shout it out
+I think i've lost the route
+Moving in circles, looking for a path out
+
+never judge a man
+without wearing the shoes
+no matter where I go
+Just brings on the blues
+It's hard to survive
+don't know if I can make it
+U keep me alive
+I'll let you know when you blow it
+
+Trapped in the Navel
+Observatory
+you're going to hear me shout
+Shout shout shout it out
+I think i've lost the route
+Moving in circles, looking for a path out
+
+Testify! Testify!
+Testify against the lord
+And I let the spirit out
+
+it's pointing spectral Spectral fingers
+
+subpoenas mysteriously ignored.
+Got a summary judgement
+got summarily judged
+
+yet despite the proceedings
+can't abandon the grudge
+
+Trapped in the Navel
+Observatory
+you're going to hear me shout
+Shout shout
+like it or lump it
+I've lost the route
+Moving in circles, looking for a path out`,
+}
+
 const tracks = [
   { side: 'A', number: 'A1', name: 'All Kindsa Guys', duration: "3'55\"", file: 'all_kindsa_guys.mp3' },
   { side: 'A', number: 'A2', name: 'White Rose', duration: "2'21\"", file: 'white_rose.mp3' },
@@ -48,6 +189,7 @@ function App() {
   const sideA = tracks.filter((t) => t.side === 'A')
   const sideB = tracks.filter((t) => t.side === 'B')
 
+  const [showLyrics, setShowLyrics] = useState(false)
   const [flipped, setFlipped] = useState(false)
   const [currentTrack, setCurrentTrack] = useState(() => {
     const params = new URLSearchParams(window.location.search)
@@ -196,8 +338,36 @@ function App() {
             <span>{formatTime(progress)}</span>
             <span>{formatTime(duration)}</span>
           </div>
+          {lyrics[tracks[currentTrack].name] !== null && (
+            <button
+              className="player-btn-lyrics"
+              onClick={() => setShowLyrics(true)}
+            >
+              Lyrics
+            </button>
+          )}
         </div>
       </section>
+
+      {showLyrics && lyrics[tracks[currentTrack].name] && (
+        <div className="lyrics-overlay" onClick={() => setShowLyrics(false)}>
+          <div className="lyrics-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="lyrics-header">
+              <h3>{tracks[currentTrack].name}</h3>
+              <button
+                className="lyrics-close"
+                onClick={() => setShowLyrics(false)}
+                aria-label="Close lyrics"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+              </button>
+            </div>
+            <pre className="lyrics-body">{lyrics[tracks[currentTrack].name]}</pre>
+          </div>
+        </div>
+      )}
 
       <section className="tracks">
         <h2>Tracklist</h2>
@@ -272,17 +442,30 @@ function App() {
       <section className="credits">
         <h2>Credits</h2>
         <div className="credits-text">
+          <p>Mostly made by Dan Goldberg, Mike Wolf, JD Foster.</p>
           <p>
-            Mostly made by Dan Goldberg, Mike Wolf, JD Foster. Sheer Terror
-            written by Government Issue.
+            Sheer Terror written by{' '}
+            <a href="https://dischord.com/band/government-issue" target="_blank" rel="noopener noreferrer">
+              Government Issue
+            </a>.
           </p>
           <p>
-            Recorded and mixed at Viva Studio in Fairfax, Va., in December 2025
-            and January 2026.
+            Recorded and mixed at{' '}
+            <a href="https://www.vivastudiova.com/" target="_blank" rel="noopener noreferrer">
+              Viva Studio
+            </a>{' '}
+            in Fairfax, Va., in December 2025 and January 2026.
           </p>
           <p>Engineered and mixed by Matthew Michel.</p>
           <p>Mastered by Will Killingsworth.</p>
-          <p>Engineer Records IGN482. Scene Police Records SCP045.</p>
+          <p>
+            <a href="https://www.engineerrecords.com/" target="_blank" rel="noopener noreferrer">
+              Engineer Records
+            </a>{' '}IGN482.{' '}
+            <a href="https://www.instagram.com/scene_police_records/" target="_blank" rel="noopener noreferrer">
+              Scene Police Records
+            </a>{' '}SCP045.
+          </p>
         </div>
       </section>
 
