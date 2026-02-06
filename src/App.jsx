@@ -481,7 +481,7 @@ function App() {
         </a>
       </nav>
 
-      <footer className="footer">diy means you can make your own record</footer>
+      <footer className="footer">diy means you can make your own record, all music and art is on the github page.  Go forth and start your own label.</footer>
     </div>
   )
 }
