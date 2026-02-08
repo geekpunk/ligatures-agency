@@ -1,7 +1,16 @@
+:root {
+  --color-primary: var(--color-primary);
+  --color-hero-bg: var(--color-primary);
+  --color-bg: #1a1a1a;
+  --color-text: #e0e0e0;
+}
+
 .site {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 /* Hero */
@@ -10,7 +19,7 @@
   flex-direction: column;
   align-items: center;
   padding: 3rem 1.5rem 2rem;
-  background-color: #5B96C7;
+  background-color: var(--color-hero-bg);
 }
 
 /* Album flip */
@@ -185,6 +194,39 @@
   color: #fff;
 }
 
+/* Album download */
+.album-download {
+  width: 100%;
+  max-width: 500px;
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.album-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--color-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-decoration: none;
+}
+
+.album-download-btn:hover {
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
 /* Lyrics dialog */
 .lyrics-overlay {
   position: fixed;
@@ -321,7 +363,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: #5B96C7;
+  color: var(--color-primary);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   padding-bottom: 0.5rem;
@@ -350,14 +392,14 @@
 }
 
 .track-active .track-name {
-  color: #5B96C7;
+  color: var(--color-primary);
 }
 
 .track-number {
   width: 2.5rem;
   font-weight: 600;
   font-style: italic;
-  color: #5B96C7;
+  color: var(--color-primary);
   flex-shrink: 0;
 }
 
@@ -374,18 +416,18 @@
 }
 
 .track-download {
-  color: #5B96C7;
+  color: var(--color-primary);
   font-size: 0.85rem;
   font-weight: 500;
   padding: 0.3rem 0.75rem;
-  border: 1px solid #5B96C7;
+  border: 1px solid var(--color-primary);
   border-radius: 3px;
   transition: all 0.15s;
   flex-shrink: 0;
 }
 
 .track-download:hover {
-  background-color: #5B96C7;
+  background-color: var(--color-primary);
   color: #fff;
 }
 
@@ -400,7 +442,7 @@
 .eq-bars span {
   display: block;
   width: 3px;
-  background: #5B96C7;
+  background: var(--color-primary);
   border-radius: 1px;
   animation: eq-bounce 0.8s ease-in-out infinite alternate;
 }
@@ -454,7 +496,7 @@
 }
 
 .credits-text a {
-  color: #5B96C7;
+  color: var(--color-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
@@ -478,14 +520,14 @@
   justify-content: center;
   width: 48px;
   height: 48px;
-  color: #5B96C7;
-  border: 1px solid #5B96C7;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
   border-radius: 50%;
   transition: all 0.15s;
 }
 
 .links a:hover {
-  background-color: #5B96C7;
+  background-color: var(--color-primary);
   color: #fff;
 }
 

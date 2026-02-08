@@ -3,162 +3,62 @@ import './App.css'
 
 const BASE = import.meta.env.BASE_URL
 
-const lyrics = {
-  'All Kindsa Guys': `I've been growing a mustache
-I've been getting into weird martial arts
-And I don't care any more
-I've lost the will to want more
-
-I've been building my brand
-I've been talking about "projects"
-That I never will do
-Watch me tell it to you
-
-Look at me!
-Acknowledge me!
-There are all kinds of guys here but none like me
-
-I've been getting tattoos of swords and maces
-I've been loitering in public spaces
-Come and talk to me
-
-I've been documenting my minutiae
-incessantly
-Put down whatever you're on
-Look I wrote you a song`,
-
-  'White Rose': `dad told me to teach the kids
-How to drive and how to swim
-when they come you never know
-when they are here it's time to go
-
-We've seen this all before
-From tulsa to Dachau
-We've seen this all before
-from the plaines to the shores
-
-Sophie and Hans left
-On such a fine sunny day
-So thousands can awaken
-And be stirred today
-
-We've seen this all before
-From the tulsa to the putsch
-We've seen this all before
-from the cities to the hills
-
-It's just a test
-Free their body
-It's just a test
-Free Palestine
-It's just a test
-Free DC`,
-
-  'Eyes Wide Open': `Am I what you want
-Is this what you want us to be
-Am I what you want
-Is this what you what you want to be
-It was all a game after all, it was just a game`,
-
-  'Currency Museum': `How does gold turn to lead?
-How does lead turn to rust?
-How does a trillion evaporate?
-How do you monetize trust?
-
-These answers and more in the currency museum
-
-Why does rarity bring value?
-Why does production bring decline?
-Why are forgeries burnt?
-How does it move the lines?
-
-Does this make sense? Does this make euros, does this make cents?
-Does this make sense? Does this make pounds, does this make pence?
-Dollars and dinars, yuan and yen
-Met expectations, smile and pretend
-
-In the currency museum
-Make money or just make your own`,
-
-  'Position Paper': `Value proposition on my chest.
-Position papers are referenced.
-Reaction, transaction
-What more do I need to say about whoever's lives matter today
-Consult my feed, no need for talking. Any questions read my front
-Categorize, tabulate
-Ossify, disseminate.`,
-
-  'Sheer Terror': null,
-
-  'Naval Observatory': `Don't have to roll in the mud
-just to learn that it's dirty
-as the years they marched on on on
-look what's become of me
-can't put it into words
-can barely put it to sound
-no matter how deep I go
-I'm never feeling the ground
-
-Trapped in the Navel
-Observatory
-you're going to hear me shout
-Shout shout shout it out
-I think i've lost the route
-Moving in circles, looking for a path out
-
-never judge a man
-without wearing the shoes
-no matter where I go
-Just brings on the blues
-It's hard to survive
-don't know if I can make it
-U keep me alive
-I'll let you know when you blow it
-
-Trapped in the Navel
-Observatory
-you're going to hear me shout
-Shout shout shout it out
-I think i've lost the route
-Moving in circles, looking for a path out
-
-Testify! Testify!
-Testify against the lord
-And I let the spirit out
-
-it's pointing spectral Spectral fingers
-
-subpoenas mysteriously ignored.
-Got a summary judgement
-got summarily judged
-
-yet despite the proceedings
-can't abandon the grudge
-
-Trapped in the Navel
-Observatory
-you're going to hear me shout
-Shout shout
-like it or lump it
-I've lost the route
-Moving in circles, looking for a path out`,
-}
-
-const tracks = [
-  { side: 'A', number: 'A1', name: 'All Kindsa Guys', duration: "3'55\"", file: 'all_kindsa_guys.mp3' },
-  { side: 'A', number: 'A2', name: 'White Rose', duration: "2'21\"", file: 'white_rose.mp3' },
-  { side: 'A', number: 'A3', name: 'Eyes Wide Open', duration: "2'09\"", file: 'eyes_wide_open.mp3' },
-  { side: 'B', number: 'B1', name: 'Currency Museum', duration: "4'20\"", file: 'currency_musuem.mp3' },
-  { side: 'B', number: 'B2', name: 'Position Paper', duration: "1'54\"", file: 'position_paper.mp3' },
-  { side: 'B', number: 'B3', name: 'Sheer Terror', duration: "1'58\"", file: 'sheer_terror.mp3' },
-  { side: 'B', number: 'B4', name: 'Naval Observatory', duration: "2'50\"", file: 'naval_observatory.mp3' },
-]
-
 function formatTime(s) {
   if (!s || isNaN(s)) return '0:00'
   const m = Math.floor(s / 60)
   const sec = Math.floor(s % 60)
   return `${m}:${sec.toString().padStart(2, '0')}`
+}
+
+function renderCreditParagraph(para, index) {
+  if (typeof para === 'string') {
+    return <p key={index}>{para}</p>
+  }
+
+  // Handle complex paragraph with links
+  const parts = []
+  let keyIndex = 0
+
+  if (para.text) {
+    parts.push(<span key={keyIndex++}>{para.text}</span>)
+  }
+
+  if (para.link) {
+    parts.push(
+      <a key={keyIndex++} href={para.link.url} target="_blank" rel="noopener noreferrer">
+        {para.link.text}
+      </a>
+    )
+  }
+
+  if (para.link1) {
+    parts.push(
+      <a key={keyIndex++} href={para.link1.url} target="_blank" rel="noopener noreferrer">
+        {para.link1.text}
+      </a>
+    )
+  }
+
+  if (para.text && para.link2) {
+    const textParts = para.text.split(' IGN482. ')
+    if (textParts.length > 1) {
+      parts.push(<span key={keyIndex++}> IGN482. </span>)
+    }
+  }
+
+  if (para.link2) {
+    parts.push(
+      <a key={keyIndex++} href={para.link2.url} target="_blank" rel="noopener noreferrer">
+        {para.link2.text}
+      </a>
+    )
+  }
+
+  if (para.suffix) {
+    parts.push(<span key={keyIndex++}>{para.suffix}</span>)
+  }
+
+  return <p key={index}>{parts}</p>
 }
 
 function GitHubIcon() {
@@ -186,35 +86,66 @@ function BandcampIcon() {
 }
 
 function App() {
-  const sideA = tracks.filter((t) => t.side === 'A')
-  const sideB = tracks.filter((t) => t.side === 'B')
-
+  const [config, setConfig] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [showLyrics, setShowLyrics] = useState(false)
   const [flipped, setFlipped] = useState(false)
-  const [currentTrack, setCurrentTrack] = useState(() => {
-    const params = new URLSearchParams(window.location.search)
-    const song = params.get('song')
-    if (song) {
-      const idx = tracks.findIndex(
-        (t) => t.file.replace('.mp3', '') === song || t.number.toLowerCase() === song.toLowerCase()
-      )
-      if (idx !== -1) return idx
-    }
-    return 0
-  })
+  const [currentTrack, setCurrentTrack] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
   const [duration, setDuration] = useState(0)
   const audioRef = useRef(null)
 
+  // Load configuration
+  useEffect(() => {
+    fetch(`${BASE}album-config.json`)
+      .then((res) => res.json())
+      .then((data) => {
+        setConfig(data)
+        setLoading(false)
+
+        // Set page title
+        document.title = data.pageTitle
+
+        // Apply custom colors if provided
+        if (data.colors) {
+          const root = document.documentElement
+          if (data.colors.primary) root.style.setProperty('--color-primary', data.colors.primary)
+          if (data.colors.heroBackground) root.style.setProperty('--color-hero-bg', data.colors.heroBackground)
+          if (data.colors.background) root.style.setProperty('--color-bg', data.colors.background)
+          if (data.colors.text) root.style.setProperty('--color-text', data.colors.text)
+        }
+
+        // Check for song parameter in URL
+        const params = new URLSearchParams(window.location.search)
+        const song = params.get('song')
+        if (song) {
+          const idx = data.tracks.findIndex(
+            (t) => t.file.replace('.mp3', '') === song || t.number.toLowerCase() === song.toLowerCase()
+          )
+          if (idx !== -1) setCurrentTrack(idx)
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load album config:', err)
+        setLoading(false)
+      })
+  }, [])
+
+  const tracks = config?.tracks || []
+  const sideA = tracks.filter((t) => t.side === 'A')
+  const sideB = tracks.filter((t) => t.side === 'B')
+
   const updateQueryString = useCallback((index) => {
+    if (!tracks[index]) return
     const slug = tracks[index].file.replace('.mp3', '')
     const url = new URL(window.location)
     url.searchParams.set('song', slug)
     window.history.replaceState({}, '', url)
-  }, [])
+  }, [tracks])
 
   const playTrack = useCallback((index) => {
+    if (!tracks[index]) return
     setCurrentTrack(index)
     setIsPlaying(true)
     updateQueryString(index)
@@ -222,10 +153,10 @@ function App() {
       audioRef.current.src = `${BASE}songs/${tracks[index].file}`
       audioRef.current.play().catch(() => {})
     }
-  }, [updateQueryString])
+  }, [updateQueryString, tracks])
 
   const togglePlay = () => {
-    if (!audioRef.current) return
+    if (!audioRef.current || !tracks[currentTrack]) return
     if (isPlaying) {
       audioRef.current.pause()
       setIsPlaying(false)
@@ -244,9 +175,10 @@ function App() {
   }
 
   const nextTrack = useCallback(() => {
+    if (tracks.length === 0) return
     const next = (currentTrack + 1) % tracks.length
     playTrack(next)
-  }, [currentTrack, playTrack])
+  }, [currentTrack, playTrack, tracks.length])
 
   const handleSeek = (e) => {
     if (!audioRef.current || !duration) return
@@ -277,6 +209,23 @@ function App() {
 
   const pct = duration ? (progress / duration) * 100 : 0
 
+  // Show loading state
+  if (loading || !config) {
+    return (
+      <div className="site">
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '100vh',
+          color: '#999'
+        }}>
+          Loading...
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="site">
       <audio ref={audioRef} preload="metadata" />
@@ -286,14 +235,14 @@ function App() {
           <div className={`album-flip-inner${flipped ? ' flipped' : ''}`}>
             <div className="album-flip-face album-flip-front">
               <img
-                src={`${BASE}images/Agency-Front.png`}
-                alt="Ligatures - Agency album cover"
+                src={`${BASE}${config.images.front}`}
+                alt={`${config.artistName} - ${config.albumName} album cover`}
               />
             </div>
             <div className="album-flip-face album-flip-back">
               <img
-                src={`${BASE}images/Agency-Back.png`}
-                alt="Ligatures - Agency album back cover"
+                src={`${BASE}${config.images.back}`}
+                alt={`${config.artistName} - ${config.albumName} album back cover`}
               />
             </div>
           </div>
@@ -301,7 +250,7 @@ function App() {
         </div>
 
         <h1 className="album-title">
-          Ligatures <span>&ndash; Agency</span>
+          {config.artistName} <span>&ndash; {config.albumName}</span>
         </h1>
 
         <div className="player">
@@ -338,7 +287,7 @@ function App() {
             <span>{formatTime(progress)}</span>
             <span>{formatTime(duration)}</span>
           </div>
-          {lyrics[tracks[currentTrack].name] !== null && (
+          {tracks[currentTrack]?.lyrics && (
             <button
               className="player-btn-lyrics"
               onClick={() => setShowLyrics(true)}
@@ -347,9 +296,22 @@ function App() {
             </button>
           )}
         </div>
+
+        <div className="album-download">
+          <a
+            className="album-download-btn"
+            href={`${BASE}${config.downloadZip}`}
+            download
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '8px' }}>
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+            </svg>
+            Download Full Album (ZIP)
+          </a>
+        </div>
       </section>
 
-      {showLyrics && lyrics[tracks[currentTrack].name] && (
+      {showLyrics && tracks[currentTrack]?.lyrics && (
         <div className="lyrics-overlay" onClick={() => setShowLyrics(false)}>
           <div className="lyrics-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="lyrics-header">
@@ -364,7 +326,7 @@ function App() {
                 </svg>
               </button>
             </div>
-            <pre className="lyrics-body">{lyrics[tracks[currentTrack].name]}</pre>
+            <pre className="lyrics-body">{tracks[currentTrack].lyrics}</pre>
           </div>
         </div>
       )}
@@ -442,46 +404,23 @@ function App() {
       <section className="credits">
         <h2>Credits</h2>
         <div className="credits-text">
-          <p>Mostly made by Dan Goldberg, Mike Wolf, JD Foster.</p>
-          <p>
-            Sheer Terror written by{' '}
-            <a href="https://dischord.com/band/government-issue" target="_blank" rel="noopener noreferrer">
-              Government Issue
-            </a>.
-          </p>
-          <p>
-            Recorded and mixed at{' '}
-            <a href="https://www.vivastudiova.com/" target="_blank" rel="noopener noreferrer">
-              Viva Studio
-            </a>{' '}
-            in Fairfax, Va., in December 2025 and January 2026.
-          </p>
-          <p>Engineered and mixed by Matthew Michel.</p>
-          <p>Mastered by Will Killingsworth.</p>
-          <p>
-            <a href="https://www.engineerrecords.com/" target="_blank" rel="noopener noreferrer">
-              Engineer Records
-            </a>{' '}IGN482.{' '}
-            <a href="https://www.instagram.com/scene_police_records/" target="_blank" rel="noopener noreferrer">
-              Scene Police Records
-            </a>{' '}SCP045.
-          </p>
+          {config.credits.paragraphs.map((para, index) => renderCreditParagraph(para, index))}
         </div>
       </section>
 
       <nav className="links">
-        <a href="https://www.github.com/geekpunk/ligatures-agency" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <a href={config.links.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
           <GitHubIcon />
         </a>
-        <a href="https://www.instagram.com/ligatures.dc" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+        <a href={config.links.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram">
           <InstagramIcon />
         </a>
-        <a href="https://ligatures.bandcamp.com/" target="_blank" rel="noopener noreferrer" aria-label="Bandcamp">
+        <a href={config.links.bandcamp} target="_blank" rel="noopener noreferrer" aria-label="Bandcamp">
           <BandcampIcon />
         </a>
       </nav>
 
-      <footer className="footer">diy means you can make your own record, all music and art is on the github page.  Go forth and start your own label.</footer>
+      <footer className="footer">{config.footer}</footer>
     </div>
   )
 }
