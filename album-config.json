@@ -1,0 +1,115 @@
+{
+  "albumName": "Agency",
+  "artistName": "Ligatures",
+  "pageTitle": "Ligatures – Agency",
+  "images": {
+    "front": "images/Agency-Front.png",
+    "back": "images/Agency-Back.png"
+  },
+  "colors": {
+    "primary": "#5B96C7",
+    "heroBackground": "#5B96C7",
+    "background": "#1a1a1a",
+    "text": "#e0e0e0"
+  },
+  "tracks": [
+    {
+      "side": "A",
+      "number": "A1",
+      "name": "All Kindsa Guys",
+      "duration": "3'55\"",
+      "file": "all_kindsa_guys.mp3",
+      "lyrics": "I've been growing a mustache\nI've been getting into weird martial arts\nAnd I don't care any more\nI've lost the will to want more\n\nI've been building my brand\nI've been talking about \"projects\"\nThat I never will do\nWatch me tell it to you\n\nLook at me!\nAcknowledge me!\nThere are all kinds of guys here but none like me\n\nI've been getting tattoos of swords and maces\nI've been loitering in public spaces\nCome and talk to me\n\nI've been documenting my minutiae\nincessantly\nPut down whatever you're on\nLook I wrote you a song"
+    },
+    {
+      "side": "A",
+      "number": "A2",
+      "name": "White Rose",
+      "duration": "2'21\"",
+      "file": "white_rose.mp3",
+      "lyrics": "dad told me to teach the kids\nHow to drive and how to swim\nwhen they come you never know\nwhen they are here it's time to go\n\nWe've seen this all before\nFrom tulsa to Dachau\nWe've seen this all before\nfrom the plaines to the shores\n\nSophie and Hans left\nOn such a fine sunny day\nSo thousands can awaken\nAnd be stirred today\n\nWe've seen this all before\nFrom the tulsa to the putsch\nWe've seen this all before\nfrom the cities to the hills\n\nIt's just a test\nFree their body\nIt's just a test\nFree Palestine\nIt's just a test\nFree DC"
+    },
+    {
+      "side": "A",
+      "number": "A3",
+      "name": "Eyes Wide Open",
+      "duration": "2'09\"",
+      "file": "eyes_wide_open.mp3",
+      "lyrics": "Am I what you want\nIs this what you want us to be\nAm I what you want\nIs this what you what you want to be\nIt was all a game after all, it was just a game"
+    },
+    {
+      "side": "B",
+      "number": "B1",
+      "name": "Currency Museum",
+      "duration": "4'20\"",
+      "file": "currency_musuem.mp3",
+      "lyrics": "How does gold turn to lead?\nHow does lead turn to rust?\nHow does a trillion evaporate?\nHow do you monetize trust?\n\nThese answers and more in the currency museum\n\nWhy does rarity bring value?\nWhy does production bring decline?\nWhy are forgeries burnt?\nHow does it move the lines?\n\nDoes this make sense? Does this make euros, does this make cents?\nDoes this make sense? Does this make pounds, does this make pence?\nDollars and dinars, yuan and yen\nMet expectations, smile and pretend\n\nIn the currency museum\nMake money or just make your own"
+    },
+    {
+      "side": "B",
+      "number": "B2",
+      "name": "Position Paper",
+      "duration": "1'54\"",
+      "file": "position_paper.mp3",
+      "lyrics": "Value proposition on my chest.\nPosition papers are referenced.\nReaction, transaction\nWhat more do I need to say about whoever's lives matter today\nConsult my feed, no need for talking. Any questions read my front\nCategorize, tabulate\nOssify, disseminate."
+    },
+    {
+      "side": "B",
+      "number": "B3",
+      "name": "Sheer Terror",
+      "duration": "1'58\"",
+      "file": "sheer_terror.mp3",
+      "lyrics": null
+    },
+    {
+      "side": "B",
+      "number": "B4",
+      "name": "Naval Observatory",
+      "duration": "2'50\"",
+      "file": "naval_observatory.mp3",
+      "lyrics": "Don't have to roll in the mud\njust to learn that it's dirty\nas the years they marched on on on\nlook what's become of me\ncan't put it into words\ncan barely put it to sound\nno matter how deep I go\nI'm never feeling the ground\n\nTrapped in the Navel\nObservatory\nyou're going to hear me shout\nShout shout shout it out\nI think i've lost the route\nMoving in circles, looking for a path out\n\nnever judge a man\nwithout wearing the shoes\nno matter where I go\nJust brings on the blues\nIt's hard to survive\ndon't know if I can make it\nU keep me alive\nI'll let you know when you blow it\n\nTrapped in the Navel\nObservatory\nyou're going to hear me shout\nShout shout shout it out\nI think i've lost the route\nMoving in circles, looking for a path out\n\nTestify! Testify!\nTestify against the lord\nAnd I let the spirit out\n\nit's pointing spectral Spectral fingers\n\nsubpoenas mysteriously ignored.\nGot a summary judgement\ngot summarily judged\n\nyet despite the proceedings\ncan't abandon the grudge\n\nTrapped in the Navel\nObservatory\nyou're going to hear me shout\nShout shout\nlike it or lump it\nI've lost the route\nMoving in circles, looking for a path out"
+    }
+  ],
+  "credits": {
+    "paragraphs": [
+      "Mostly made by Dan Goldberg, Mike Wolf, JD Foster.",
+      {
+        "text": "Sheer Terror written by ",
+        "link": {
+          "text": "Government Issue",
+          "url": "https://dischord.com/band/government-issue"
+        },
+        "suffix": "."
+      },
+      {
+        "text": "Recorded and mixed at ",
+        "link": {
+          "text": "Viva Studio",
+          "url": "https://www.vivastudiova.com/"
+        },
+        "suffix": " in Fairfax, Va., in December 2025 and January 2026."
+      },
+      "Engineered and mixed by Matthew Michel.",
+      "Mastered by Will Killingsworth.",
+      {
+        "link1": {
+          "text": "Engineer Records",
+          "url": "https://www.engineerrecords.com/"
+        },
+        "text": " IGN482. ",
+        "link2": {
+          "text": "Scene Police Records",
+          "url": "https://www.instagram.com/scene_police_records/"
+        },
+        "suffix": " SCP045."
+      }
+    ]
+  },
+  "links": {
+    "github": "https://www.github.com/geekpunk/ligatures-agency",
+    "instagram": "https://www.instagram.com/ligatures.dc",
+    "bandcamp": "https://ligatures.bandcamp.com/"
+  },
+  "footer": "Streaming services are worse than the record industry was before it. Go to the github link above, clone that repository and make your owm album page by editimg the config, and deploy.  DIY or DIE.",
+  "downloadZip": "ligatures-agency-album.zip"
+}

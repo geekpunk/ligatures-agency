@@ -1,0 +1,64 @@
+{
+  "_comment": "This is an example template for creating a new album configuration",
+  "albumName": "Your Album Name",
+  "artistName": "Your Artist Name",
+  "pageTitle": "Artist Name – Album Name",
+  "images": {
+    "front": "images/Album-Front.png",
+    "back": "images/Album-Back.png"
+  },
+  "colors": {
+    "primary": "#5B96C7",
+    "heroBackground": "#5B96C7",
+    "background": "#1a1a1a",
+    "text": "#e0e0e0"
+  },
+  "tracks": [
+    {
+      "side": "A",
+      "number": "A1",
+      "name": "Track Name 1",
+      "duration": "3'30\"",
+      "file": "track_1.mp3",
+      "lyrics": "Your lyrics here\nWith line breaks\nFor verses"
+    },
+    {
+      "side": "A",
+      "number": "A2",
+      "name": "Track Name 2",
+      "duration": "2'45\"",
+      "file": "track_2.mp3",
+      "lyrics": "More lyrics..."
+    },
+    {
+      "side": "B",
+      "number": "B1",
+      "name": "Track Name 3",
+      "duration": "4'15\"",
+      "file": "track_3.mp3",
+      "lyrics": null
+    }
+  ],
+  "credits": {
+    "paragraphs": [
+      "Written and performed by Artist Name.",
+      {
+        "text": "Recorded at ",
+        "link": {
+          "text": "Studio Name",
+          "url": "https://studio-website.com"
+        },
+        "suffix": " in City, State."
+      },
+      "Engineered by Engineer Name.",
+      "Mastered by Mastering Engineer."
+    ]
+  },
+  "links": {
+    "github": "https://github.com/username/repo",
+    "instagram": "https://www.instagram.com/username",
+    "bandcamp": "https://artistname.bandcamp.com/"
+  },
+  "footer": "Your custom footer text here.",
+  "downloadZip": "your-album-name.zip"
+}
