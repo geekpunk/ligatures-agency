@@ -90,19 +90,28 @@
         "suffix": " in Fairfax, Va., in December 2025 and January 2026."
       },
       "Engineered and mixed by Matthew Michel.",
-      "Mastered by Will Killingsworth.",
+      {
+        "text": "Mastered by Will Killingsworth at ",
+        "link": {
+          "text": "Dead Air Studio",
+          "url": "https://deadairstudios.com/"
+        },
+        "suffix": "."
+
+      },
       {
         "link1": {
           "text": "Engineer Records IGN482.",
           "url": "https://www.engineerrecords.com/"
-        },
-        "text": " // ",
-        "link2": {
+        }
+      },
+      {
+       "link2": {
           "text": "Scene Police Records SCP045.",
           "url": "https://www.instagram.com/scene_police_records/"
-        },
-        "suffix": " // "
+        }
       }
+
     ]
   },
   "links": {
