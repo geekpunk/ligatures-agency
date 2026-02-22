@@ -115,7 +115,22 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser to preview your album page.
 
-### 6. Build for Production
+### 6. Test (Optional)
+
+```bash
+# Run tests in watch mode
+npm test
+
+# Run tests once
+npm run test:run
+
+# View test UI
+npm run test:ui
+```
+
+See [TESTING.md](./TESTING.md) for detailed testing documentation.
+
+### 7. Build for Production
 
 ```bash
 npm run build
