@@ -7,7 +7,10 @@ A customizable album page and music player for DIY musicians and labels. Built w
 ## Features
 
 - 🎵 HTML5 audio player with full playlist playback
-- 🎨 Flippable album cover (click to toggle front/back)
+- 🎨 4-state interactive album viewer: front cover → inner lyrics → inner lyrics back → back cover
+- 👆 Click or swipe to navigate — motion-tracked with spring-back on partial drag
+- 🔄 Boundary resistance: swiping past the first or last page tilts and snaps back
+- ⏱️ Auto-advances through all 4 pages every 10 seconds when the page is at the top and idle
 - ⬇️ Individual track downloads + full album ZIP download
 - 🔗 Shareable URLs via `?song=` query string (e.g. `?song=white_rose` or `?song=B3`)
 - 📱 Fully responsive design
@@ -39,12 +42,15 @@ npm install
 ### 3. Add Your Content
 
 #### Add Your Album Artwork
-Place your album cover images in the `images/` directory:
+Place your album cover images in the `public/images/` directory. The viewer supports 4 images for the full gatefold experience:
 ```
-images/
-├── YourAlbum-Front.png
-└── YourAlbum-Back.png
+public/images/
+├── YourAlbum-Front.png      # Front cover
+├── YourAlbum-Back.png       # Back cover
+├── YourAlbum-Lyrics.png     # Inner left panel (lyrics)
+└── YourAlbum-LyricsBack.png # Inner right panel
 ```
+All images should be square (1:1 aspect ratio) for best results.
 
 #### Add Your Songs
 Place your MP3 files in the `public/songs/` directory:
@@ -67,6 +73,8 @@ Edit `public/album-config.json` to customize all content. This file controls eve
   "pageTitle": "Band Name – Album Name",
   "images": {
     "front": "images/YourAlbum-Front.png",
+    "lyrics": "images/YourAlbum-Lyrics.png",
+    "lyricsBack": "images/YourAlbum-LyricsBack.png",
     "back": "images/YourAlbum-Back.png"
   },
   "tracks": [
@@ -184,9 +192,11 @@ To update content (add songs, change text, etc.):
 your-album/
 ├── public/
 │   ├── album-config.json      # ← Edit this to customize everything!
-│   ├── images/                # ← Your album artwork
-│   │   ├── Front.png
-│   │   └── Back.png
+│   ├── images/                # ← Your album artwork (all square, same dimensions)
+│   │   ├── Front.png          #   Front cover
+│   │   ├── Lyrics.png         #   Inner left panel
+│   │   ├── LyricsBack.png     #   Inner right panel
+│   │   └── Back.png           #   Back cover
 │   └── songs/                 # ← Your MP3 files
 │       ├── track_01.mp3
 │       └── ...
