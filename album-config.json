@@ -44,7 +44,7 @@
       "number": "B1",
       "name": "Currency Museum",
       "duration": "4'20\"",
-      "file": "currency_musuem.mp3",
+      "file": "currency_museum.mp3",
       "lyrics": "How does gold turn to lead?\nHow does lead turn to rust?\nHow does a trillion evaporate?\nHow do you monetize trust?\n\nThese answers and more in the currency museum\n\nWhy does rarity bring value?\nWhy does production bring decline?\nWhy are forgeries burnt?\nHow does it move the lines?\n\nDoes this make sense? Does this make euros, does this make cents?\nDoes this make sense? Does this make pounds, does this make pence?\nDollars and dinars, yuan and yen\nMet expectations, smile and pretend\n\nIn the currency museum\nMake money or just make your own"
     },
     {
@@ -58,7 +58,7 @@
     {
       "side": "B",
       "number": "B3",
-      "name": "Sheer Terror (by Goverment Issue)",
+      "name": "Sheer Terror (by Government Issue)",
       "duration": "1'58\"",
       "file": "sheer_terror.mp3",
       "lyrics": "It irritates you, the way I dress\nIt bothers you, my hair so short\nI don't it to annoy you, I confess\nI hate you and all your sort\nSheer terror\nDestroying things is easy to do\nBut me, I just like scaring you\nYou wonder what goes on in my head\nDon't try to find out, or you'll be dead"
@@ -121,6 +121,6 @@
     "instagram": "https://www.instagram.com/ligatures.dc",
     "bandcamp": "https://ligatures.bandcamp.com/"
   },
-  "footer": "Streaming services are worse than the record industry was before it. Go to the github link above, clone that repository and make your owm album page by editimg the config, and deploy.  DIY or DIE.",
+  "footer": "Streaming services are worse than the record industry was before it. Go to the github link above, clone that repository and make your own album page by editing the config, and deploy.  DIY or DIE.",
   "downloadZip": "ligatures-agency-album.zip"
 }
