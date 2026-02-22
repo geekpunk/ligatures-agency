@@ -22,55 +22,41 @@
   background-color: var(--color-hero-bg);
 }
 
-/* Album flip */
-.album-flip-container {
+/* Album viewer */
+.album-viewer {
   width: 100%;
   max-width: 500px;
   cursor: pointer;
   position: relative;
-  perspective: 1200px;
-}
-
-.album-flip-inner {
-  position: relative;
-  width: 100%;
-  transition: transform 0.7s ease;
-  transform-style: preserve-3d;
-}
-
-.album-flip-inner.flipped {
-  transform: rotateY(180deg);
-}
-
-.album-flip-face {
-  width: 100%;
-  backface-visibility: hidden;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
-.album-flip-face img {
+.album-viewer img {
   width: 100%;
   display: block;
 }
 
-.album-flip-back {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: rotateY(180deg);
-}
-
-.flip-hint {
-  text-align: center;
+.album-dots {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
   margin-top: 0.75rem;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+  background: none;
 }
 
-.flip-hint::before {
-  content: 'click to see ';
+.album-dot {
+  height: 6px;
+  width: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  flex-shrink: 0;
+}
+
+.album-dot-active {
+  background: rgba(255, 255, 255, 0.85);
 }
 
 .album-title {

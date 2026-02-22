@@ -4,6 +4,8 @@
   "pageTitle": "Ligatures – Agency",
   "images": {
     "front": "images/Agency-Front.png",
+    "lyrics": "ligatures-agency-album/images/lyrics.png",
+    "lyricsBack": "ligatures-agency-album/images/lyrics-back.png",
     "back": "images/Agency-Back.png"
   },
   "colors": {

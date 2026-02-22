@@ -89,7 +89,19 @@ function App() {
   const [config, setConfig] = useState(null)
   const [loading, setLoading] = useState(true)
   const [showLyrics, setShowLyrics] = useState(false)
-  const [flipped, setFlipped] = useState(false)
+
+  // Album viewer: 4 pages (0=front, 1=lyrics, 2=lyrics-back, 3=back)
+  const [albumPage, setAlbumPageState] = useState(0)
+  const [trans, setTransState] = useState(null) // { from, to, progress } | null
+  const albumRef = useRef(null)
+  const albumPageRef = useRef(0)
+  const transRef = useRef(null)
+  const isDraggingRef = useRef(false)
+  const dragStartXRef = useRef(0)
+  const rafIdRef = useRef(null)
+  const timerDotRefs = useRef([null, null, null, null])
+  const goToAlbumPageRef = useRef(null)
+
   const [currentTrack, setCurrentTrack] = useState(0)
   const [isPlaying, setIsPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
@@ -209,6 +221,263 @@ function App() {
 
   const pct = duration ? (progress / duration) * 100 : 0
 
+  // --- Album viewer helpers ---
+  const allImages = config ? [
+    config.images.front,
+    config.images.lyrics,
+    config.images.lyricsBack,
+    config.images.back,
+  ] : []
+
+  const getAlbumTransType = (from, to) => {
+    const lo = Math.min(from, to), hi = Math.max(from, to)
+    return lo === 1 && hi === 2 ? 'slide' : 'flip'
+  }
+
+  const easeIO = (t) => t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t
+
+  const setAlbumPage = (p) => { albumPageRef.current = p; setAlbumPageState(p) }
+  const setTrans = (t) => { transRef.current = t; setTransState(t) }
+
+  const runAlbumAnim = (startProg, endProg, duration, onDone) => {
+    if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
+    const startTime = performance.now()
+    const tick = (now) => {
+      const raw = Math.min((now - startTime) / duration, 1)
+      const prog = startProg + (endProg - startProg) * easeIO(raw)
+      setTransState(prev => prev ? { ...prev, progress: prog } : null)
+      if (raw < 1) {
+        rafIdRef.current = requestAnimationFrame(tick)
+      } else {
+        rafIdRef.current = null
+        onDone?.()
+      }
+    }
+    rafIdRef.current = requestAnimationFrame(tick)
+  }
+
+  const commitAlbumTo = (toPage, startProg) => {
+    const remaining = Math.max((1 - startProg) * 480, 40)
+    runAlbumAnim(startProg, 1, remaining, () => {
+      setAlbumPage(toPage)
+      setTrans(null)
+    })
+  }
+
+  const revertAlbum = (startProg) => {
+    const remaining = Math.max(startProg * 320, 40)
+    runAlbumAnim(startProg, 0, remaining, () => setTrans(null))
+  }
+
+  const goToAlbumPage = (newPage) => {
+    const from = albumPageRef.current
+    if (newPage === from || newPage < 0 || newPage > 3) return
+    if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
+    transRef.current = { from, to: newPage, progress: 0 }
+    setTransState({ from, to: newPage, progress: 0 })
+    requestAnimationFrame(() => commitAlbumTo(newPage, 0))
+  }
+
+  // Keep ref current so the timer effect can always call the latest version
+  goToAlbumPageRef.current = goToAlbumPage
+
+  // Auto-advance timer: cycles pages every 10s when at top of page and not interacting
+  useEffect(() => {
+    const CYCLE = 10000
+    let rafId
+    let elapsed = 0
+    let lastTimestamp = null
+    let lastPage = albumPageRef.current
+
+    const tick = (now) => {
+      // Detect manual page change → reset timer
+      if (albumPageRef.current !== lastPage) {
+        timerDotRefs.current.forEach(el => { if (el) el.style.width = '' })
+        elapsed = 0
+        lastTimestamp = null
+        lastPage = albumPageRef.current
+      }
+
+      const paused = isDraggingRef.current || window.scrollY > 5 || transRef.current !== null
+
+      if (!paused) {
+        if (lastTimestamp !== null) elapsed += now - lastTimestamp
+        lastTimestamp = now
+      } else {
+        lastTimestamp = null
+      }
+
+      const progress = Math.min(elapsed / CYCLE, 1)
+
+      // Drive active dot width directly (no React re-render)
+      timerDotRefs.current.forEach((el, i) => {
+        if (!el) return
+        if (i === albumPageRef.current) {
+          el.style.width = `${6 + progress * 26}px`
+        } else {
+          el.style.width = ''
+        }
+      })
+
+      if (progress >= 1) {
+        elapsed = 0
+        lastTimestamp = null
+        const cur = albumPageRef.current
+        goToAlbumPageRef.current(cur < 3 ? cur + 1 : 0)
+      }
+
+      rafId = requestAnimationFrame(tick)
+    }
+
+    rafId = requestAnimationFrame(tick)
+    return () => {
+      cancelAnimationFrame(rafId)
+      timerDotRefs.current.forEach(el => { if (el) el.style.width = '' })
+    }
+  }, [])
+
+  const handleAlbumPointerDown = (e) => {
+    e.currentTarget.setPointerCapture(e.pointerId)
+    // Cancel ongoing animation and settle
+    if (rafIdRef.current) {
+      cancelAnimationFrame(rafIdRef.current)
+      rafIdRef.current = null
+      const t = transRef.current
+      if (t) {
+        const settled = t.progress >= 0.5 ? t.to : t.from
+        albumPageRef.current = settled
+        setAlbumPageState(settled)
+        transRef.current = null
+        setTransState(null)
+      }
+    }
+    isDraggingRef.current = true
+    dragStartXRef.current = e.clientX
+  }
+
+  const handleAlbumPointerMove = (e) => {
+    if (!isDraggingRef.current) return
+    const dx = e.clientX - dragStartXRef.current
+    const w = albumRef.current?.offsetWidth || 400
+    const cur = albumPageRef.current
+
+    if (dx < 0 && cur < 3) {
+      const prog = Math.min(-dx / w, 1)
+      const t = { from: cur, to: cur + 1, progress: prog }
+      transRef.current = t
+      setTransState(t)
+    } else if (dx > 0 && cur > 0) {
+      const prog = Math.min(dx / w, 1)
+      const t = { from: cur, to: cur - 1, progress: prog }
+      transRef.current = t
+      setTransState(t)
+    }
+  }
+
+  const handleAlbumPointerUp = (e) => {
+    if (!isDraggingRef.current) return
+    isDraggingRef.current = false
+    const dx = e.clientX - dragStartXRef.current
+    const t = transRef.current
+
+    if (Math.abs(dx) < 12) {
+      // Tap: advance forward (or reverse at last page)
+      if (t) setTrans(null)
+      const cur = albumPageRef.current
+      goToAlbumPage(cur < 3 ? cur + 1 : 0)
+      return
+    }
+
+    if (!t) return // swiped in impossible direction (boundary)
+
+    if (t.progress >= 0.25) {
+      commitAlbumTo(t.to, t.progress)
+    } else {
+      revertAlbum(t.progress)
+    }
+  }
+
+  const handleAlbumPointerCancel = () => {
+    isDraggingRef.current = false
+    const t = transRef.current
+    if (t) revertAlbum(t.progress)
+  }
+
+  const renderAlbumContent = () => {
+    if (!trans) {
+      return (
+        <img
+          key={albumPage}
+          src={`${BASE}${allImages[albumPage]}`}
+          alt="album artwork"
+          style={{ width: '100%', display: 'block' }}
+          draggable={false}
+        />
+      )
+    }
+
+    const { from, to, progress } = trans
+    const type = getAlbumTransType(from, to)
+    const forward = to > from
+
+    if (type === 'flip') {
+      const lo = Math.min(from, to), hi = Math.max(from, to)
+      const angle = forward ? -progress * 180 : -(1 - progress) * 180
+      return (
+        <div style={{ width: '100%', perspective: '1200px' }}>
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            transformStyle: 'preserve-3d',
+            transform: `rotateY(${angle}deg)`,
+          }}>
+            <img
+              src={`${BASE}${allImages[lo]}`}
+              alt=""
+              style={{ width: '100%', display: 'block', backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+              draggable={false}
+            />
+            <img
+              src={`${BASE}${allImages[hi]}`}
+              alt=""
+              style={{
+                position: 'absolute', top: 0, left: 0,
+                width: '100%', display: 'block',
+                backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg)',
+              }}
+              draggable={false}
+            />
+          </div>
+        </div>
+      )
+    }
+
+    // slide
+    const sign = forward ? -1 : 1
+    return (
+      <div style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
+        <img
+          src={`${BASE}${allImages[from]}`}
+          alt=""
+          style={{ width: '100%', display: 'block', transform: `translateX(${sign * progress * 100}%)` }}
+          draggable={false}
+        />
+        <img
+          src={`${BASE}${allImages[to]}`}
+          alt=""
+          style={{
+            position: 'absolute', top: 0, left: 0,
+            width: '100%', display: 'block',
+            transform: `translateX(${-sign * (1 - progress) * 100}%)`,
+          }}
+          draggable={false}
+        />
+      </div>
+    )
+  }
+  // --- end album viewer helpers ---
+
   // Show loading state
   if (loading || !config) {
     return (
@@ -231,22 +500,25 @@ function App() {
       <audio ref={audioRef} preload="metadata" />
 
       <section className="hero">
-        <div className="album-flip-container" onClick={() => setFlipped(!flipped)}>
-          <div className={`album-flip-inner${flipped ? ' flipped' : ''}`}>
-            <div className="album-flip-face album-flip-front">
-              <img
-                src={`${BASE}${config.images.front}`}
-                alt={`${config.artistName} - ${config.albumName} album cover`}
-              />
-            </div>
-            <div className="album-flip-face album-flip-back">
-              <img
-                src={`${BASE}${config.images.back}`}
-                alt={`${config.artistName} - ${config.albumName} album back cover`}
-              />
-            </div>
-          </div>
-          <div className="flip-hint">{flipped ? 'front' : 'back'}</div>
+        <div
+          ref={albumRef}
+          className="album-viewer"
+          onPointerDown={handleAlbumPointerDown}
+          onPointerMove={handleAlbumPointerMove}
+          onPointerUp={handleAlbumPointerUp}
+          onPointerCancel={handleAlbumPointerCancel}
+        >
+          {renderAlbumContent()}
+        </div>
+
+        <div className="album-dots">
+          {[0, 1, 2, 3].map(i => (
+            <span
+              key={i}
+              ref={el => { timerDotRefs.current[i] = el }}
+              className={`album-dot${albumPage === i ? ' album-dot-active' : ''}`}
+            />
+          ))}
         </div>
 
         <h1 className="album-title">
