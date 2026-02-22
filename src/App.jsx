@@ -336,6 +336,27 @@ function App() {
     }
   }, [])
 
+  const revertResistance = (startAngle) => {
+    if (rafIdRef.current) cancelAnimationFrame(rafIdRef.current)
+    const startTime = performance.now()
+    const duration = 380
+    const tick = (now) => {
+      const raw = Math.min((now - startTime) / duration, 1)
+      const eased = 1 - Math.pow(1 - raw, 3) // ease-out cubic
+      const angle = startAngle * (1 - eased)
+      transRef.current = { resistance: angle }
+      setTransState({ resistance: angle })
+      if (raw < 1) {
+        rafIdRef.current = requestAnimationFrame(tick)
+      } else {
+        rafIdRef.current = null
+        transRef.current = null
+        setTransState(null)
+      }
+    }
+    rafIdRef.current = requestAnimationFrame(tick)
+  }
+
   const handleAlbumPointerDown = (e) => {
     e.currentTarget.setPointerCapture(e.pointerId)
     // Cancel ongoing animation and settle
@@ -343,13 +364,13 @@ function App() {
       cancelAnimationFrame(rafIdRef.current)
       rafIdRef.current = null
       const t = transRef.current
-      if (t) {
+      if (t && !('resistance' in t)) {
         const settled = t.progress >= 0.5 ? t.to : t.from
         albumPageRef.current = settled
         setAlbumPageState(settled)
-        transRef.current = null
-        setTransState(null)
       }
+      transRef.current = null
+      setTransState(null)
     }
     isDraggingRef.current = true
     dragStartXRef.current = e.clientX
@@ -371,6 +392,12 @@ function App() {
       const t = { from: cur, to: cur - 1, progress: prog }
       transRef.current = t
       setTransState(t)
+    } else {
+      // Boundary resistance: damped tilt with diminishing returns
+      const angle = Math.sqrt(Math.min(Math.abs(dx) / w, 1)) * 18 * (dx > 0 ? 1 : -1)
+      const t = { resistance: angle }
+      transRef.current = t
+      setTransState(t)
     }
   }
 
@@ -388,7 +415,12 @@ function App() {
       return
     }
 
-    if (!t) return // swiped in impossible direction (boundary)
+    if (!t) return
+
+    if ('resistance' in t) {
+      revertResistance(t.resistance)
+      return
+    }
 
     if (t.progress >= 0.25) {
       commitAlbumTo(t.to, t.progress)
@@ -400,7 +432,9 @@ function App() {
   const handleAlbumPointerCancel = () => {
     isDraggingRef.current = false
     const t = transRef.current
-    if (t) revertAlbum(t.progress)
+    if (!t) return
+    if ('resistance' in t) revertResistance(t.resistance)
+    else revertAlbum(t.progress)
   }
 
   const renderAlbumContent = () => {
@@ -413,6 +447,22 @@ function App() {
           style={{ width: '100%', display: 'block' }}
           draggable={false}
         />
+      )
+    }
+
+    if ('resistance' in trans) {
+      return (
+        <div style={{ width: '100%', perspective: '800px' }}>
+          <img
+            src={`${BASE}${allImages[albumPage]}`}
+            alt="album artwork"
+            style={{
+              width: '100%', display: 'block',
+              transform: `rotateY(${trans.resistance}deg)`,
+            }}
+            draggable={false}
+          />
+        </div>
       )
     }
 
